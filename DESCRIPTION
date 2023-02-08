@@ -1,12 +1,23 @@
 Package: SQLove
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Execute SQL Scripts in R Containing Multiple Queries
+Version: 0.0.1
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Kerns", "Sam", , "samwkerns@gmail.com", role = c("aut", "cre"))
+Description: The nature of working with SQL scripts efficiently often requires 
+             the creation of temporary tables and there are few clean and simple 
+             R SQL execution approaches that allow you to complete this kind of 
+             work with the R environment. This package seeks to give SQL 
+             implementations in R a little love by deploying functions that 
+             allow you to deploy complex SQL scripts within a typical R DBI workflow.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Imports: 
+    DBI,
+    readr,
+    RJDBC
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

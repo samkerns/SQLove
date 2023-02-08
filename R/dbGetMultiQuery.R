@@ -1,24 +1,35 @@
+#' Query a database with multiple query actions and one, final, select statement.
+#' @description Requires a DBI workflow that creates a connection with a relational database per DBI: https://dbi.r-dbi.org/. This function is an extension of the DBI::dbGetQuery and RJDBC::dbSendUpdate functions.
+#' @param connection A database connection object
+#' @param sql_file_path Character vector pointing to SQL script
+#' @param pattern A character object you would like to substitute in the SQL script - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification
+#' @param replacement A character vector replacing the pattern specified - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification
+#' @returns A data object
+#' @examples
+#' dbGetMultiQuery(conn, "~/path_to/file.sql")
+#' dbGetMultiQuery(conn, "~/path_to/file.sql", pattern = "state = [A-Z](2)", replacement = "state = MD")
+
 dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replacement = NULL){
 
   #Reading in the SQL file
   sql_file <- readr::read_file(sql_file_path)
 
   #Removing all comments /* and --
-  sql_file <- gsub("/\\*.*?\\*/", "", sql_file)
-  sql_file <- gsub("--.*?\\r", "\\\r", sql_file)
+  sql_file <- base::gsub("/\\*.*?\\*/", "", sql_file)
+  sql_file <- base::gsub("--.*?\\r", "\\\r", sql_file)
 
   #String replacement for data pull
   if (is.null(pattern) & is.null(replacement)){
     sql_file <- sql_file
   } else {
-    sql_file <- gsub(pattern = pattern, replacement = replacement, sql_file)
+    sql_file <- base::gsub(pattern = pattern, replacement = replacement, sql_file)
   }
 
   #Extracting all the separate queries by semicolons
-  sql_list <- strsplit(sql_file, "(?<=[;])", perl = T)
+  sql_list <- base::strsplit(sql_file, "(?<=[;])", perl = T)
 
   #Evaluating the length of the list
-  query_length <- lengths(sql_list)
+  query_length <- base::lengths(sql_list)
 
   #Running the appropriate query approach based on list length
 
@@ -32,7 +43,7 @@ dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replaceme
 
     for (i in c(1:(query_length-1))){
 
-      RJBDC::dbSendUpdate(conn, SQL(sql_list[[1]][[i]]), immediate = T)
+      RJDBC::dbSendUpdate(conn, SQL(sql_list[[1]][[i]]), immediate = T)
 
     }
 
