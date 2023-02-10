@@ -6,8 +6,10 @@
 #' @param replacement A character vector replacing the pattern specified - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification
 #' @returns A data object
 #' @examples
-#' dbGetMultiQuery(conn, "~/path_to/file.sql")
+#' \dontrun{
+#' dbGetMultiQuery(conn, "~/path_to/file.sql")}
 #' dbGetMultiQuery(conn, "~/path_to/file.sql", pattern = "state = [A-Z](2)", replacement = "state = MD")
+#' }
 
 dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replacement = NULL){
 

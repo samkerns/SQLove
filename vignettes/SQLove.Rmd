@@ -1,0 +1,111 @@
+---
+title: "SQLove - Simple Functions for Complex Queries"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{SQLove_Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(SQLove)
+```
+
+## Introduction
+
+The `SQLove` package has been designed to provide helper functions for complex SQL queries that a user may want to execute within an RStudio environment. This particular package leverages the `DBI`, `RJDBC`, and `readr` packages. Since each relational database setup is a little different, the user should check the compatibility of these packages with their workflow before attempting to deploy `SQLove` functions.
+
+## The Problem
+
+The `DBI` and `RJDBC` packages provide exceptionally powerful tools for integrating SQL queries into the R environment. In a typical workflow using R, the user may want to bring down a simple table and then manipulate the data using powerful R tools such as `tidyverse`. However, some use cases exist where complex SQL legacy code can be run to pull down data so that R can be used for analytic purposes only. This is especially relevant where the user's local machine has limited memory or low processing speed. In these cases, leveraging complex SQL queries can reduce the load on the local machine. However, the typical `DBI::dbGetQuery()` function only handles one `SELECT` statement at a time. Therefore, the user would need to break down a complex SQL script that, for example, creates numerous temporary tables and then joins them, into multiple character scripts passed to multiple functions before the final output matches what they would see if they simply ran the full script.
+
+This is the problem that `SQLove` hopes to solve with the `dbGetMultiQuery()` function, which allows the user to pass a SQL file containing unlimited query actions that end with a single, final, `SELECT` statement. Additionally, `SQLove` includes the `dbSendMultiUpdate()` function which allows the user to run unlimited query actions to modify, update, or create database objects without pulling any information directly into the R environment. This function may be helpful for users who want to automate database actions outside of the database environment (e.g. small teams working on productionizing process, teams who contract out for database management services but who want to retain some individual processes, etc.).
+
+## `dbGetMultiQuery`
+
+Let's go through a simple example that demonstrates the functionality of the `dbGetMultiQuery()` function. Suppose that you have three tables that you want to modify and then join prior to bringing data into R. In the "leads" table, you have lead_id, date, and product. In the "sales" table, you have lead_id, date, sale_amount. Here is one way you might modify and then join these tables in SQL:
+
+```{r, eval = F}
+CREATE TEMP TABLE lead_count AS
+  SELECT
+    lead_id
+    ,COUNT(DISTINCT lead_id) as num_leads
+    FROM leads
+    WHERE lead_id NOT LIKE 'SPAM'
+    GROUP BY 1;
+    
+CREATE TEMP TABLE lead_sales AS
+    SELECT
+      lead_id
+      ,SUM(sale_amount) as tot_sales
+      FROM sales
+      WHERE lead_id NOT LIKE 'SPAM'
+      GROUP BY 1;
+
+SELECT a.* 
+      FROM lead_count a 
+      LEFT JOIN lead_sales b
+        ON a.lead_id = b.lead_id
+
+```
+
+In a typical workflow for `DBI`, you would need to separate these statements and evaluate each individually (the first two using `dbSendUpdate()` and the final one using `dbGetQuery()`). This is where the `dbGetMultiQuery()` function shines!
+
+After you have set up your connection per the `DBI` [guidance here](https://dbi.r-dbi.org/). You can simply use the following convention for executing your full SQL script and loading it into R like this:
+
+```{r, eval = F}
+sales_volume <- dbGetMultiQuery(connection = conn,
+                                sql_file_path = "~/path/to/file.sql")
+```
+
+Running this code will then automatically parse each query and will run the `RJDBC::dbSendUpdate()` function on all but the final statement. The final statement will be run using the `DBI::dbGetQuery()` function. This function works by creating a list of character vectors representing each query. It does this by separating on the `;` character, which, in SQL convention, represents the end of a query action. It then loops through each in order until the final vector in the list. For the final vector, `dbGetMultiQuery` anticipates a `SELECT` statement that will bring down the data in its final form to the R environment!
+
+To avoid any difficulties in processing the SQL file across different SQL types, comments (both in the `--` format and the `/* */` format) are automatically removed from the SQL script after it is read into the R environment. Additionally, `dbGetMultiQuery()` includes `base::gsub()` functionality that allows the user to substitute strings. This may be valuable if the user what to change a condition to compare data outputs interactively in the R environment. Below, is an example of this functionality using the same SQL script above:
+
+```{r, eval = F}
+spam_volume <- dbGetMultiQuery(connection = conn,
+                               sql_file_path = "~/path/to/file.sql",
+                               pattern = "NOT LIKE SPAM",
+                               replacement = "LIKE SPAM")
+```
+
+In this example, instead of eliminating SPAM, we are retaining ONLY rows that are marked as SPAM so that we can evaluate the volume of SPAM in the "leads" and "sales" tables. It is important to note that the `pattern` and `replacement` arguments in this function replace all instances of the string across the FULL SQL SCRIPT. This means that if you want to replace a string in only one of the queries, you will need to be careful about how you call the arguments so you don't accidentally alter a string in another query.
+
+## `dbSendMultiUpdate`
+
+For some users, there is an advantage to running SQL scripts from the R environment rather than within the database itself. For example, you may be able to more easily automate running R scripts during off hours if you are part of a small team without a dedicated ETL workflow. Alternatively, you may contract out your ETL needs, but desire to retain some processes in-house so your contractor doesn't have access to your code. These, and probably other totally legitimate reasons not outlined here, underpin the `dbSendMultiUpdate` function, which allows the user to run an unlimited number of SQL query statements that do not produce an output. Here is an example:
+
+```{r, eval = F}
+CREATE TEMP TABLE lead_count AS
+  SELECT
+    lead_id
+    ,COUNT(DISTINCT lead_id) as num_leads
+    FROM leads
+    WHERE lead_id NOT LIKE 'SPAM'
+    GROUP BY 1;
+    
+CREATE TEMP TABLE lead_sales AS
+    SELECT
+      lead_id
+      ,SUM(sale_amount) as tot_sales
+      FROM sales
+      WHERE lead_id NOT LIKE 'SPAM'
+      GROUP BY 1;
+
+CREATE TABLE schema.lead_info as
+      SELECT *
+      FROM lead_count a 
+      LEFT JOIN lead_sales b
+        ON a.lead_id = b.lead_id
+```
+
+You'll notice that this script is almost identical to the one above. However, our final statement no creates a table in the relational database rather than bringing data down into the R environment. In this way, the `dbSendMultiUpdate` function does not produce an output. Rather, it simply runs the SQL code in the relational database environment on your behalf.
+
+This is important because, as a user of this function, your quality assurance (QA) procedures must happen at the level of the SQL script itself. Because of this, it is recommended that this function be used as a production tool rather than as an interactive tool. While constructing the SQL script itself, the user will likely be better served working in a relational database IDE.
