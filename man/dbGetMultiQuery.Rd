@@ -22,7 +22,8 @@ A data object
 Requires a DBI workflow that creates a connection with a relational database per DBI: https://dbi.r-dbi.org/. This function is an extension of the DBI::dbGetQuery and RJDBC::dbSendUpdate functions.
 }
 \examples{
-library(SQLove)
-dbGetMultiQuery(conn, "~/path_to/file.sql")
-dbGetMultiQuery(conn, "~/path_to/file.sql", pattern = "state = [A-Z](2)", replacement = "state = MD")
+\dontrun{
+SQLove::dbGetMultiQuery(conn, "~/path_to/file.sql")
+SQLove::dbGetMultiQuery(conn, "~/path_to/file.sql", pattern = "state = [A-Z](2)", replacement = "state = MD")
+}
 }
