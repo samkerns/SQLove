@@ -7,8 +7,8 @@
 #' @returns A data object
 #' @examples
 #' \dontrun{
-#' SQLove::dbGetMultiQuery(conn, "~/path_to/file.sql")
-#' SQLove::dbGetMultiQuery(conn, "~/path_to/file.sql", pattern = "state = [A-Z](2)", replacement = "state = MD")
+#' dbGetMultiQuery(conn, "~/path_to/file.sql")
+#' dbGetMultiQuery(conn, "path", pattern = "X", replacement = "Y")
 #' }
 
 dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replacement = NULL){

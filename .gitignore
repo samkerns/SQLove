@@ -41,4 +41,4 @@ vignettes/*.pdf
 inst/doc
 
 # CRAN comments
-cran-comments.md
+^cran-comments.md

@@ -23,7 +23,7 @@ Requires a DBI workflow that creates a connection with a relational database per
 }
 \examples{
 \dontrun{
-SQLove::dbGetMultiQuery(conn, "~/path_to/file.sql")
-SQLove::dbGetMultiQuery(conn, "~/path_to/file.sql", pattern = "state = [A-Z](2)", replacement = "state = MD")
+dbGetMultiQuery(conn, "~/path_to/file.sql")
+dbGetMultiQuery(conn, "path", pattern = "X", replacement = "Y")
 }
 }

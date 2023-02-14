@@ -1,1 +1,3 @@
-2023-02-14: CRAN submission of package
+## SQLove 0.0.1
+
+Initial submission of package to CRAN
