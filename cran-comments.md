@@ -1,18 +1,44 @@
-##This is a resubmission as of 2/14/23
+##This is a resubmission as of 2/15/23
 
 ## R CMD check results
-There were no ERRORs or WARNINGs
+There were 0 ERRORs, 0 WARNINGs, and 0 NOTES
 
-There were 2 NOTEs:
+##Feedback as of 2/15/23, 7:21AM EST
+Please always write package names, software names and API (application
+programming interface) names in single quotes in title and description.
+e.g: --> 'SQL'; 'R'
+Please note that package names are case sensitive.
 
-❯ checking R code for possible problems ... NOTE
-  dbGetMultiQuery: no visible binding for global variable 'conn'
-  dbGetMultiQuery: no visible global function definition for 'SQL'
-  dbSendMultiUpdate: no visible binding for global variable 'conn'
-  Undefined global functions or variables:
-    SQL conn
+COMPLETED
 
-❯ checking Rd line widths ... NOTE
-  Rd file 'dbGetMultiQuery.Rd':
-    \examples lines wider than 100 characters:
-       SQLove::dbGetMultiQuery(conn, "~/path_to/file.sql", pattern = "state = [A-Z](2)", replacement = "state = MD")
+
+If there are references describing the methods in your package, please
+add these in the description field of your DESCRIPTION file in the form
+authors (year) <doi:...>
+authors (year) <arXiv:...>
+authors (year, ISBN:...)
+or if those are not available: <https:...>
+with no space after 'doi:', 'arXiv:', 'https:' and angle brackets for
+auto-linking. (If you want to add a title as well please put it in
+quotes: "Title")
+
+COMPLETED
+
+Please always explain all acronyms in the description text. -> DBI
+
+COMPLETED
+
+You have examples for unexported functions. Please either omit these
+examples or export these functions.
+Examples for unexported function
+   dbGetMultiQuery() in:
+      dbGetMultiQuery.Rd
+
+COMPLETED - Functions exported
+
+Please add small executable examples in your Rd-files to illustrate the
+use of the exported function but also enable automatic testing.
+
+FIXED - Switched from example to usage, package requires upstream code. Detailed in vignette
+Note - please advise if this is not acceptable, writing example requires large code block
+and may be better served in vignette format.

@@ -3,6 +3,9 @@
 #' @param connection A database connection object
 #' @param sql_file_path Character vector pointing to SQL script
 #' @returns No object returned - for production automation
+#' @usage
+#' dbSendMultiUpdate(connection, sql_file_path)
+#' @export
 
 dbSendMultiUpdate <- function(connection, sql_file_path){
 

@@ -21,9 +21,3 @@ A data object
 \description{
 Requires a DBI workflow that creates a connection with a relational database per DBI: https://dbi.r-dbi.org/. This function is an extension of the DBI::dbGetQuery and RJDBC::dbSendUpdate functions.
 }
-\examples{
-\dontrun{
-dbGetMultiQuery(conn, "~/path_to/file.sql")
-dbGetMultiQuery(conn, "path", pattern = "X", replacement = "Y")
-}
-}

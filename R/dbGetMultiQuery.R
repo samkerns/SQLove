@@ -5,11 +5,9 @@
 #' @param pattern A character object you would like to substitute in the SQL script - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification
 #' @param replacement A character vector replacing the pattern specified - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification
 #' @returns A data object
-#' @examples
-#' \dontrun{
-#' dbGetMultiQuery(conn, "~/path_to/file.sql")
-#' dbGetMultiQuery(conn, "path", pattern = "X", replacement = "Y")
-#' }
+#' @usage
+#' dbGetMultiQuery(connection, sql_file_path, pattern = NULL, replacement = NULL)
+#' @export
 
 dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replacement = NULL){
 
