@@ -1,3 +1,13 @@
+##This is an update as of 3/6/23
+
+## R CMD check results
+There were 0 ERRORs, 0 WARNINGs, and 0 NOTES
+
+## Updates
+Code update includes progress notes printed to console when running
+the functions included. No other changes are present apart from 
+updates to the package documentation to reflect the changes.
+
 ##This is a resubmission as of 2/15/23
 
 ## R CMD check results

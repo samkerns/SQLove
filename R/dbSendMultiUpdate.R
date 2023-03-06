@@ -27,6 +27,8 @@ dbSendMultiUpdate <- function(connection, sql_file_path){
 
       RJDBC::dbSendUpdate(conn, sql_list[[1]][[i]], immediate = T)
 
+      print(paste("Statement", i, "of", query_length, "complete"))
+
     }
 
   }

@@ -45,6 +45,8 @@ dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replaceme
 
       RJDBC::dbSendUpdate(conn, DBI::SQL(sql_list[[1]][[i]]), immediate = T)
 
+      print(paste("Statement", i, "of", query_length, "complete"))
+
     }
 
     #Create dataframe from final query statement
