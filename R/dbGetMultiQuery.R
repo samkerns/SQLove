@@ -36,7 +36,7 @@ dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replaceme
   #If only 1 query is available, it's a SELECT statement, use DBI::dbGetQuery
   if (query_length == 1){
 
-    df <- DBI::dbGetQuery(conn, sql_list[[1]][[1]])
+    df <- DBI::dbGetQuery(connection, sql_list[[1]][[1]])
 
   #If more than 1 query is available, dbSendUpdate for all but final statement
   } else{
