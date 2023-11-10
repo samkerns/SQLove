@@ -1,3 +1,7 @@
+## SQLove 0.0.3
+
+Bug fixes identified by users
+
 ## SQLove 0.0.2
 
 Added additional functionality to package that prints the number of query statements completed in real time to show the live progress of their SQL code.

@@ -43,7 +43,7 @@ dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replaceme
 
     for (i in c(1:(query_length-1))){
 
-      RJDBC::dbSendUpdate(conn, DBI::SQL(sql_list[[1]][[i]]), immediate = T)
+      RJDBC::dbSendUpdate(connection, DBI::SQL(sql_list[[1]][[i]]), immediate = T)
 
       print(paste("Statement", i, "of", query_length, "complete"))
 

@@ -25,7 +25,7 @@ dbSendMultiUpdate <- function(connection, sql_file_path){
   #Running the appropriate query approach based on list length
   for (i in c(1:(query_length))){
 
-      RJDBC::dbSendUpdate(conn, sql_list[[1]][[i]], immediate = T)
+      RJDBC::dbSendUpdate(connection, sql_list[[1]][[i]], immediate = T)
 
       print(paste("Statement", i, "of", query_length, "complete"))
 

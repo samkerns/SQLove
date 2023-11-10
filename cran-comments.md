@@ -1,3 +1,11 @@
+##This is an update as of 11/10/23
+
+## R CMD check results
+There were 0 ERRORs, 0 WARNINGs, and 0 NOTES
+
+## Updates
+Code update includes a simple bug fix identified by a package user
+
 ##This is an update as of 3/6/23
 
 ## R CMD check results
