@@ -50,7 +50,7 @@ dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replaceme
     }
 
     #Create dataframe from final query statement
-    df <- DBI::dbGetQuery(conn, sql_list[[1]][[query_length]])
+    df <- DBI::dbGetQuery(connection, sql_list[[1]][[query_length]])
 
   }
 }
