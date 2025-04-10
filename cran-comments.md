@@ -1,3 +1,11 @@
+##This is an update as of 4/10/25
+
+## R CMD check results
+There were 0 ERRORs, 0 WARNINGs, and 0 NOTES
+
+## Updates
+Built in some new utility for smoother operation and multiple gsubs
+
 ##This is an update as of 11/13/23
 
 ## R CMD check results

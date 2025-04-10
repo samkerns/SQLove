@@ -1,6 +1,6 @@
 Package: SQLove
 Title: Execute 'SQL' Scripts in 'R' Containing Multiple Queries
-Version: 0.0.4
+Version: 1.0.1
 Authors@R: 
     person("Kerns", "Sam", , "samwkerns@gmail.com", role = c("aut", "cre"))
 Description: The nature of working with structured query language ('SQL') scripts 

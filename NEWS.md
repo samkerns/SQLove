@@ -1,3 +1,7 @@
+## SQLove 1.0.1
+
+First major package update! Automatic whitespace trimming at the end of the SQL script is now implemented and pattern/replacements arguments can be provided character vectors for multiple subs simultaneously.
+
 ## SQLove 0.0.3
 
 Bug fixes identified by users

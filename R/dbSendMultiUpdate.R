@@ -16,6 +16,9 @@ dbSendMultiUpdate <- function(connection, sql_file_path){
   sql_file <- base::gsub("/\\*.*?\\*/", "", sql_file)
   sql_file <- base::gsub("--.*?\\r", "\\\r", sql_file)
 
+  #Removing whitespace at the end of the sql script
+  sql_file <- base::gsub("\\s+$", "", sql_file)
+
   #Extracting all the separate queries by semicolons
   sql_list <- base::strsplit(sql_file, "(?<=[;])", perl = T)
 

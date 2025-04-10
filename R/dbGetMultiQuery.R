@@ -2,8 +2,8 @@
 #' @description Requires a DBI workflow that creates a connection with a relational database per DBI: https://dbi.r-dbi.org/. This function is an extension of the DBI::dbGetQuery and RJDBC::dbSendUpdate functions.
 #' @param connection A database connection object
 #' @param sql_file_path Character vector pointing to SQL script
-#' @param pattern A character object you would like to substitute in the SQL script - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification
-#' @param replacement A character vector replacing the pattern specified - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification
+#' @param pattern A character object you would like to substitute in the SQL script - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification. You may provide a single string or a vector of strings equal in length to the vector of strings in the replacement field.
+#' @param replacement A character vector replacing the pattern specified - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification. You may provide a single string or a vector of strings equal in length to the vector of strings in the replacement field.
 #' @returns A data object
 #' @usage
 #' dbGetMultiQuery(connection, sql_file_path, pattern = NULL, replacement = NULL)
@@ -18,11 +18,28 @@ dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replaceme
   sql_file <- base::gsub("/\\*.*?\\*/", "", sql_file)
   sql_file <- base::gsub("--.*?\\r", "\\\r", sql_file)
 
+  #Removing whitespace at the end of the sql script
+  sql_file <- base::gsub("\\s+$", "", sql_file)
+
   #String replacement for data pull
   if (is.null(pattern) & is.null(replacement)){
     sql_file <- sql_file
   } else {
-    sql_file <- base::gsub(pattern = pattern, replacement = replacement, sql_file)
+
+    #Creating a df of the mappings
+    gsub_map <- as.data.frame(pattern, replacement)
+
+    #Looping over the dataframe for all the gsub replacements
+    for (i in c(1:nrow(gsub_map))){
+
+      #Replacing all the pattern/replacement elements
+      sql_file <- base::gsub(pattern = pattern[i, 1], replacement = replacement[i, 2], sql_file)
+
+      #Creating a simple log to show the replacement has been made
+      print(paste("Replaced", pattern[i,1], "with", replacement[i,2]))
+
+    }
+
   }
 
   #Extracting all the separate queries by semicolons
