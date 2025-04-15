@@ -1,15 +1,16 @@
 #' Query a database with multiple query actions and one, final, select statement.
 #' @description Requires a DBI workflow that creates a connection with a relational database per DBI: https://dbi.r-dbi.org/. This function is an extension of the DBI::dbGetQuery and RJDBC::dbSendUpdate functions.
 #' @param connection A database connection object
+#' @param connection_type A string indicating if the connection type is a JDBC or ODBC connection - accepts "JDBC" or "ODBC" as arguments, defaults to "JDBC"
 #' @param sql_file_path Character vector pointing to SQL script
 #' @param pattern A character object you would like to substitute in the SQL script - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification. You may provide a single string or a vector of strings equal in length to the vector of strings in the replacement field.
 #' @param replacement A character vector replacing the pattern specified - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification. You may provide a single string or a vector of strings equal in length to the vector of strings in the replacement field.
 #' @returns A data object
 #' @usage
-#' dbGetMultiQuery(connection, sql_file_path, pattern = NULL, replacement = NULL)
+#' dbGetMultiQuery(connection, connection_type = "JDBC", sql_file_path, pattern = NULL, replacement = NULL)
 #' @export
 
-dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replacement = NULL){
+dbGetMultiQuery <- function(connection, connection_type = "JDBC", sql_file_path, pattern = NULL, replacement = NULL){
 
   #Reading in the SQL file
   sql_file <- readr::read_file(sql_file_path)
@@ -33,7 +34,7 @@ dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replaceme
     for (i in c(1:nrow(gsub_map))){
 
       #Replacing all the pattern/replacement elements
-      sql_file <- base::gsub(pattern = pattern[i, 1], replacement = replacement[i, 2], sql_file)
+      sql_file <- base::gsub(pattern = gsub_map$pattern[i, 1], replacement = gsub_map$replacement[i, 2], sql_file)
 
       #Creating a simple log to show the replacement has been made
       print(paste("Replaced", pattern[i,1], "with", replacement[i,2]))
@@ -55,8 +56,8 @@ dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replaceme
 
     df <- DBI::dbGetQuery(connection, sql_list[[1]][[1]])
 
-  #If more than 1 query is available, dbSendUpdate for all but final statement
-  } else{
+  #If more than 1 query is available and JDBC connection, dbSendUpdate for all but final statement
+  } else if (connection_type == "JDBC"){
 
     for (i in c(1:(query_length-1))){
 
@@ -68,6 +69,25 @@ dbGetMultiQuery <- function(connection, sql_file_path, pattern = NULL, replaceme
 
     #Create dataframe from final query statement
     df <- DBI::dbGetQuery(connection, sql_list[[1]][[query_length]])
+
+  #If more than 1 query is available and ODBC connection, dbExecute for all but final statement
+  } else if (connection_type == "ODBC"){
+
+    for (i in c(1:(query_length-1))){
+
+      DBI::dbExecute(connection, DBI::SQL(sql_list[[1]][[i]]))
+
+      print(paste("Statement", i, "of", query_length, "complete"))
+
+    }
+
+    #Create dataframe from final query statement
+    df <- DBI::dbGetQuery(connection, sql_list[[1]][[query_length]])
+
+  } else {
+
+    #Create a little error message for if something other than JDBC or ODBC is selected
+    print("Whoops, you need to be using a JDBC or ODBC connection. Make sure you check that connection_type is defined correctly in the dbGetMultiQuery function")
 
   }
 }

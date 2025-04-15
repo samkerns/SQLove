@@ -1,3 +1,11 @@
+##This is an update as of 4/15/25
+
+## R CMD check results
+There were 0 ERRORs, 0 WARNINGs, and 0 NOTES
+
+## Updates
+Cleaned up a bug and added functionality for ODBC
+
 ##This is an update as of 4/10/25
 
 ## R CMD check results

@@ -1,6 +1,6 @@
 Package: SQLove
 Title: Execute 'SQL' Scripts in 'R' Containing Multiple Queries
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: 
     person("Kerns", "Sam", , "samwkerns@gmail.com", role = c("aut", "cre"))
 Description: The nature of working with structured query language ('SQL') scripts 
@@ -17,7 +17,8 @@ RoxygenNote: 7.2.3
 Imports: 
     DBI,
     readr,
-    RJDBC
+    RJDBC,
+    odbc
 Suggests: 
     knitr,
     rmarkdown
