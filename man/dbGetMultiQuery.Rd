@@ -4,14 +4,14 @@
 \alias{dbGetMultiQuery}
 \title{Query a database with multiple query actions and one, final, select statement.}
 \usage{
-dbGetMultiQuery(connection, connection_type = "JDBC", sql_file_path, pattern = NULL, replacement = NULL)
+dbGetMultiQuery(conn, conn_type = "JDBC", sql_path, pattern = NULL, replacement = NULL)
 }
 \arguments{
-\item{connection}{A database connection object}
+\item{conn}{A database connection object}
 
-\item{connection_type}{A string indicating if the connection type is a JDBC or ODBC connection - accepts "JDBC" or "ODBC" as arguments, defaults to "JDBC"}
+\item{conn_type}{A string indicating if the connection type is a JDBC or ODBC connection - accepts "JDBC" or "ODBC" as arguments, defaults to "JDBC"}
 
-\item{sql_file_path}{Character vector pointing to SQL script}
+\item{sql_path}{Character vector pointing to SQL script}
 
 \item{pattern}{A character object you would like to substitute in the SQL script - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification. You may provide a single string or a vector of strings equal in length to the vector of strings in the replacement field.}
 

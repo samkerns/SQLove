@@ -1,14 +1,14 @@
 #' Run multiple SQL query actions within the DB environment.
 #' @description Requires a DBI workflow that creates a connection with a relational database per DBI: https://dbi.r-dbi.org/. This function is an extension of the RJDBC::dbSendUpdate function.
-#' @param connection A database connection object
-#' @param connection_type A string indicating if the connection type is a JDBC or ODBC connection - accepts "JDBC" or "ODBC" as arguments, defaults to "JDBC"
-#' @param sql_file_path Character vector pointing to SQL script
+#' @param conn A database connection object
+#' @param conn_type A string indicating if the connection type is a JDBC or ODBC connection - accepts "JDBC" or "ODBC" as arguments, defaults to "JDBC"
+#' @param sql_path Character vector pointing to SQL script
 #' @returns No object returned - for production automation
 #' @usage
-#' dbSendMultiUpdate(connection, connection_type = "JDBC", sql_file_path)
+#' dbSendMultiUpdate(conn, conn_type = "JDBC", sql_path)
 #' @export
 
-dbSendMultiUpdate <- function(connection, connection_type = "JDBC", sql_file_path){
+dbSendMultiUpdate <- function(conn, conn_type = "JDBC", sql_path){
 
   #Reading in the SQL file
   sql_file <- readr::read_file(sql_file_path)

@@ -1,16 +1,16 @@
 #' Query a database with multiple query actions and one, final, select statement.
 #' @description Requires a DBI workflow that creates a connection with a relational database per DBI: https://dbi.r-dbi.org/. This function is an extension of the DBI::dbGetQuery and RJDBC::dbSendUpdate functions.
-#' @param connection A database connection object
-#' @param connection_type A string indicating if the connection type is a JDBC or ODBC connection - accepts "JDBC" or "ODBC" as arguments, defaults to "JDBC"
-#' @param sql_file_path Character vector pointing to SQL script
+#' @param conn A database connection object
+#' @param conn_type A string indicating if the connection type is a JDBC or ODBC connection - accepts "JDBC" or "ODBC" as arguments, defaults to "JDBC"
+#' @param sql_path Character vector pointing to SQL script
 #' @param pattern A character object you would like to substitute in the SQL script - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification. You may provide a single string or a vector of strings equal in length to the vector of strings in the replacement field.
 #' @param replacement A character vector replacing the pattern specified - this is not required and defaults to NULL. Calls gsub under the hood, so use regex for pattern identification. You may provide a single string or a vector of strings equal in length to the vector of strings in the replacement field.
 #' @returns A data object
 #' @usage
-#' dbGetMultiQuery(connection, connection_type = "JDBC", sql_file_path, pattern = NULL, replacement = NULL)
+#' dbGetMultiQuery(conn, conn_type = "JDBC", sql_path, pattern = NULL, replacement = NULL)
 #' @export
 
-dbGetMultiQuery <- function(connection, connection_type = "JDBC", sql_file_path, pattern = NULL, replacement = NULL){
+dbGetMultiQuery <- function(conn, conn_type = "JDBC", sql_path, pattern = NULL, replacement = NULL){
 
   #Reading in the SQL file
   sql_file <- readr::read_file(sql_file_path)
