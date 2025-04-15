@@ -4,10 +4,12 @@
 \alias{dbSendMultiUpdate}
 \title{Run multiple SQL query actions within the DB environment.}
 \usage{
-dbSendMultiUpdate(connection, sql_file_path)
+dbSendMultiUpdate(connection, connection_type = "JDBC", sql_file_path)
 }
 \arguments{
 \item{connection}{A database connection object}
+
+\item{connection_type}{A string indicating if the connection type is a JDBC or ODBC connection - accepts "JDBC" or "ODBC" as arguments, defaults to "JDBC"}
 
 \item{sql_file_path}{Character vector pointing to SQL script}
 }
