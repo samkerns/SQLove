@@ -13,7 +13,7 @@
 dbGetMultiQuery <- function(conn, conn_type = "JDBC", sql_path, pattern = NULL, replacement = NULL){
 
   #Reading in the SQL file
-  sql_file <- readr::read_file(sql_file_path)
+  sql_file <- readr::read_file(sql_path)
 
   #Removing all comments /* and --
   sql_file <- base::gsub("/\\*.*?\\*/", "", sql_file)
@@ -54,40 +54,40 @@ dbGetMultiQuery <- function(conn, conn_type = "JDBC", sql_path, pattern = NULL, 
   #If only 1 query is available, it's a SELECT statement, use DBI::dbGetQuery
   if (query_length == 1){
 
-    df <- DBI::dbGetQuery(connection, sql_list[[1]][[1]])
+    df <- DBI::dbGetQuery(conn, sql_list[[1]][[1]])
 
   #If more than 1 query is available and JDBC connection, dbSendUpdate for all but final statement
-  } else if (connection_type == "JDBC"){
+  } else if (conn_type == "JDBC"){
 
     for (i in c(1:(query_length-1))){
 
-      RJDBC::dbSendUpdate(connection, DBI::SQL(sql_list[[1]][[i]]), immediate = T)
+      RJDBC::dbSendUpdate(conn, DBI::SQL(sql_list[[1]][[i]]), immediate = T)
 
       print(paste("Statement", i, "of", query_length, "complete"))
 
     }
 
     #Create dataframe from final query statement
-    df <- DBI::dbGetQuery(connection, sql_list[[1]][[query_length]])
+    df <- DBI::dbGetQuery(conn, sql_list[[1]][[query_length]])
 
   #If more than 1 query is available and ODBC connection, dbExecute for all but final statement
-  } else if (connection_type == "ODBC"){
+  } else if (conn_type == "ODBC"){
 
     for (i in c(1:(query_length-1))){
 
-      DBI::dbExecute(connection, DBI::SQL(sql_list[[1]][[i]]))
+      DBI::dbExecute(conn, DBI::SQL(sql_list[[1]][[i]]))
 
       print(paste("Statement", i, "of", query_length, "complete"))
 
     }
 
     #Create dataframe from final query statement
-    df <- DBI::dbGetQuery(connection, sql_list[[1]][[query_length]])
+    df <- DBI::dbGetQuery(conn, sql_list[[1]][[query_length]])
 
   } else {
 
     #Create a little error message for if something other than JDBC or ODBC is selected
-    print("Whoops, you need to be using a JDBC or ODBC connection. Make sure you check that connection_type is defined correctly in the dbGetMultiQuery function")
+    print("Whoops, you need to be using a JDBC or ODBC connection. Make sure you check that conn_type is defined correctly in the dbGetMultiQuery function")
 
   }
 }

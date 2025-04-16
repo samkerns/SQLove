@@ -11,7 +11,7 @@
 dbSendMultiUpdate <- function(conn, conn_type = "JDBC", sql_path){
 
   #Reading in the SQL file
-  sql_file <- readr::read_file(sql_file_path)
+  sql_file <- readr::read_file(sql_path)
 
   #Removing all comments /* and --
   sql_file <- base::gsub("/\\*.*?\\*/", "", sql_file)
@@ -27,21 +27,21 @@ dbSendMultiUpdate <- function(conn, conn_type = "JDBC", sql_path){
   query_length <- base::lengths(sql_list)
 
   #Running the appropriate query approach based on list length
-  if (connection_type == "JDBC"){
+  if (conn_type == "JDBC"){
 
     for (i in c(1:(query_length))){
 
-      RJDBC::dbSendUpdate(connection, sql_list[[1]][[i]], immediate = T)
+      RJDBC::dbSendUpdate(conn, sql_list[[1]][[i]], immediate = T)
 
       print(paste("Statement", i, "of", query_length, "complete"))
 
     }
 
-  } else if (connection_type == "ODBC"){
+  } else if (conn_type == "ODBC"){
 
     for (i in c(1:(query_length))){
 
-      DBI::dbExecute(connection, sql_list[[1]][[i]])
+      DBI::dbExecute(conn, sql_list[[1]][[i]])
 
       print(paste("Statement", i, "of", query_length, "complete"))
     }
@@ -49,7 +49,7 @@ dbSendMultiUpdate <- function(conn, conn_type = "JDBC", sql_path){
   } else {
 
     #Create a little error message for if something other than JDBC or ODBC is selected
-    print("Whoops, you need to be using a JDBC or ODBC connection. Make sure you check that connection_type is defined correctly in the dbGetMultiQuery function")
+    print("Whoops, you need to be using a JDBC or ODBC connection. Make sure you check that conn_type is defined correctly in the dbGetMultiQuery function")
 
     }
 }
