@@ -22,7 +22,7 @@ If you are new to SQLove, the best place to start is the [most up-to-date vignet
 The most up-to-date version of this package is available in GitHub, with regular updates being made to CRAN no more frequently than on a monthly basis. Therefore, if you're having any issues with bugs/functionality, please try the GitHub version as well.
 
 ``` r
-# The easiest way to get dplyr is to install SQLove from CRAN:
+# The easiest way to get SQLOVE is to install it from CRAN:
 install.packages("SQLove")
 ```
 
