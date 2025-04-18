@@ -1,18 +1,12 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# SQLove <img src="https://github.com/user-attachments/assets/dc35857a-db61-489d-ac00-7c6f52aef7a5" align="right" height="272"/>
+# SQLove <img src="https://github.com/user-attachments/assets/673752f9-a22a-4415-ba66-986411846f19" align="right" height="136"/>
 
 <!-- badges: start -->
 
 [![CRAN
-status](https://www.r-pkg.org/badges/version/SQLove)](https://cran.r-project.org/package=dplyr)
-[![R-CMD-check](https://github.com/samkerns/SQLove/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidyverse/dplyr/actions/workflows/R-CMD-check.yaml)
+status](https://www.r-pkg.org/badges/version/SQLove)]
+[![R-CMD-check](https://github.com/samkerns/SQLove/actions/workflows/R-CMD-check.yaml/badge.svg)]
 
 <!-- badges: end -->
 
