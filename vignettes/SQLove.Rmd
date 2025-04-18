@@ -61,7 +61,8 @@ In a typical workflow for `DBI`, you would need to separate these statements and
 After you have set up your connection per the `DBI` [guidance here](https://dbi.r-dbi.org/). You can simply use the following convention for executing your full SQL script and loading it into R like this:
 
 ```{r, eval = F}
-sales_volume <- dbGetMultiQuery(connection = conn,
+sales_volume <- dbGetMultiQuery(conn = conn,
+                                conn_type = 'JDBC',
                                 sql_file_path = "~/path/to/file.sql")
 ```
 
@@ -70,13 +71,29 @@ Running this code will then automatically parse each query and will run the `RJD
 To avoid any difficulties in processing the SQL file across different SQL types, comments (both in the `--` format and the `/* */` format) are automatically removed from the SQL script after it is read into the R environment. Additionally, `dbGetMultiQuery()` includes `base::gsub()` functionality that allows the user to substitute strings. This may be valuable if the user what to change a condition to compare data outputs interactively in the R environment. Below, is an example of this functionality using the same SQL script above:
 
 ```{r, eval = F}
-spam_volume <- dbGetMultiQuery(connection = conn,
+spam_volume <- dbGetMultiQuery(conn = conn,
+                               conn_type = "ODBC",
                                sql_file_path = "~/path/to/file.sql",
-                               pattern = "NOT LIKE SPAM",
-                               replacement = "LIKE SPAM")
+                               pattern = "NOT LIKE 'SPAM'",
+                               replacement = "LIKE 'SPAM'")
 ```
 
-In this example, instead of eliminating SPAM, we are retaining ONLY rows that are marked as SPAM so that we can evaluate the volume of SPAM in the "leads" and "sales" tables. It is important to note that the `pattern` and `replacement` arguments in this function replace all instances of the string across the FULL SQL SCRIPT. This means that if you want to replace a string in only one of the queries, you will need to be careful about how you call the arguments so you don't accidentally alter a string in another query.
+In this example, instead of eliminating SPAM, we are retaining ONLY rows that are marked as SPAM so that we can evaluate the volume of SPAM in the "leads" and "sales" tables. It is important to note that the `pattern` and `replacement` arguments in this function replace all instances of the string across the FULL SQL SCRIPT. This means that if you want to replace a string in only one of the queries, you will need to be careful about how you call the arguments so you don't accidentally alter a string in another query. In addition, there is functionality for creating a series of `pattern` and `replacement` options by feeding the arguments character vectors.
+
+```{r, eval = F}
+#Creating positionally mapped character vectors for pattern/replacement
+spam_patterns <- c("NOT LIKE 'SPAM'", "sale_amount", "tot_sales")
+spam_replacements <- c("LIKE 'SPAM'", "app_flag", "tot_apps")
+
+#Passing the vectors as arguments to dbGetMultiQuery
+spam_volume <- dbGetMultiQuery(conn = conn,
+                               conn_type = "ODBC",
+                               sql_file_path = "~/path/to/file.sql",
+                               pattern = spam_patterns,
+                               replacement = spam_replacements)
+```
+
+In this way, each of the elements in the `spam_patterns` vector will be replaced by the positionally equivalent element in the `spam_replacements` vector.
 
 ## `dbSendMultiUpdate`
 
