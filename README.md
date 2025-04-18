@@ -1,12 +1,6 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# SQLove <img src="https://github.com/user-attachments/assets/0cb7009e-af30-47c2-b4c5-b09b17b3f186" align="right" height="138"/>
+# SQLove <img src="https://github.com/user-attachments/assets/0cb7009e-af30-47c2-b4c5-b09b17b3f186" align="right" height="272"/>
 
 <!-- badges: start -->
 
