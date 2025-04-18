@@ -28,16 +28,16 @@ dbGetMultiQuery <- function(conn, conn_type = "JDBC", sql_path, pattern = NULL, 
   } else {
 
     #Creating a df of the mappings
-    gsub_map <- as.data.frame(pattern, replacement)
+    gsub_map <- data.frame(pattern, replacement)
 
     #Looping over the dataframe for all the gsub replacements
     for (i in c(1:nrow(gsub_map))){
 
       #Replacing all the pattern/replacement elements
-      sql_file <- base::gsub(pattern = gsub_map$pattern[i, 1], replacement = gsub_map$replacement[i, 2], sql_file)
+      sql_file <- base::gsub(pattern = gsub_map[i, 1], replacement = gsub_map[i, 2], sql_file)
 
       #Creating a simple log to show the replacement has been made
-      print(paste("Replaced", pattern[i,1], "with", replacement[i,2]))
+      print(paste("Replaced", pattern[i], "with", replacement[i]))
 
     }
 
