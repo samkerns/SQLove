@@ -4,9 +4,9 @@
 
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/SQLove)]
-[![R-CMD-check](https://github.com/samkerns/SQLove/actions/workflows/R-CMD-check.yaml/badge.svg)]
+![CRAN
+status](https://www.r-pkg.org/badges/version/SQLove)
+![R-CMD-check](https://github.com/samkerns/SQLove/actions/workflows/R-CMD-check.yaml/badge.svg)
 
 <!-- badges: end -->
 
