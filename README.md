@@ -8,6 +8,11 @@
 status](https://www.r-pkg.org/badges/version/SQLove)](https://cran.r-project.org/package=dplyr)
 [![R-CMD-check](https://github.com/samkerns/SQLove/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidyverse/dplyr/actions/workflows/R-CMD-check.yaml)
 
+
+
+
+
+
 <!-- badges: end -->
 
 ## Overview
